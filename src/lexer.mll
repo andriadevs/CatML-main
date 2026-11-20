@@ -20,6 +20,8 @@ rule read =
   | "!" { NOT }
   | "*" { TIMES }
   | "+" { PLUS }
+  | "&" { AND }
+  | "|" { OR }
   | "^" { CONCAT }
   | "(" { LPAREN }
   | ")" { RPAREN }

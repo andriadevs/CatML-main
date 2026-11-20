@@ -27,7 +27,7 @@ type expr =
      (* functions & recursive functions, the first two arith_types are the return type and parameter type respectively *)
      | Fun of arith_type * arith_type * var * expr | Fix of arith_type  * arith_type * var * var * expr | App of expr * expr
      (* print outputs a string to the terminal, input requests user input from the terminal and reduces into a string containing the user's input *)
-     | Print of expr | Input (* Try making it so that input expression can have an int counter so that when a trace is done, the values for each input from a previous run can be reused*)
+     | Print of expr | Input
      (* rand reduces to a random integer in the given range *)
      | Rand of expr * expr
      (* breaks an expression, only the second expression is returned when a break statement is reduced *)
@@ -53,6 +53,7 @@ let is_val e = match e with
    | Bool _ -> true
    | Pair _ -> true
    | Fun _ -> true
+   | String _ -> true
    | _ -> false
 
 (*************************)
@@ -304,7 +305,7 @@ let rec lookup (g,x) : arith_type option =
  *)
 let extend (g,x,tp) : context = (x,tp)::g
 
-type type_result = Type of arith_type | NoType of expr
+type type_result = Type of arith_type | NoType of expr (* added this to help with type error messages *)
 
 let rec type_of_expr (g, e0) : type_result =
   match e0 with
@@ -372,7 +373,7 @@ let rec type_of_expr (g, e0) : type_result =
     begin match type_of_expr (g,e1) with
     | Type t1 ->
         begin match type_of_expr (g,e2) with
-        | Type t2 -> if t1 = t2 then Type t1 else NoType e0
+        | Type t2 -> if t1 = t2 then Type (PAIR(t1,t2)) else NoType e0
         | NoType e' -> NoType e'
         end
     | NoType e' -> NoType e'
@@ -496,12 +497,6 @@ let rec pretty_trace e stepper =
     | NotReducible e' -> Printf.printf "  (Bad, Stuck Expression)\n"; flush stdout
     | Step e' -> Printf.printf "->\n"; flush stdout; pretty_trace e' stepper
 
-let rec pretty_trace_2 e stepper : string =
-    if (is_val e) then (string_of_expr e) ^ "\n" else
-    match step e with
-        | NotReducible e' -> (string_of_expr e) ^ "  (Bad, Stuck Expression)\n"
-        | Step e' -> (string_of_expr e) ^ "->\n" ^ (pretty_trace_2 e' stepper)
-
 let rec trace_and_reduce e stepper : expr * string =
     if (is_val e) then (e, (string_of_expr e) ^ "\n") else
     begin match step e with
@@ -526,24 +521,3 @@ let rec stepper e = pretty_trace e true;;
   side effects : Pretty prints execution trace of e. 
 *)
 let rec tracer e = pretty_trace e false;;
-
-(* Testing *)
-(*let test_expr = 
-  Break(Print(String("Wow\n")),
-  Let(INT, "v", StringToInt(Input),
-  Let(FUN(INT, INT), "sum",
-    Fix(INT, INT, "rec", "x",
-      If(
-        Equal(Var("x"), Int(0)),
-        Int(0),
-        Plus(Var("x"), App(Var("rec"), Plus(Var("x"), Int(-1))))
-      )
-    ),
-    App(Var("sum"), Var("v"))
-  ))
-  )
-;;
-
-print_string(string_of_expr(multistep(test_expr)) ^ "\n");;*)
-
-(*print_string(string_of_expr(test_expr))*)

@@ -7,7 +7,7 @@ open Lang
 %token <string> STRING
 %token TYPE_INT TYPE_BOOL TYPE_FUN TYPE_STRING
 %token TRUE FALSE
-%token NOT EQUALS
+%token NOT EQUALS AND OR
 %token TIMES PLUS
 %token LPAREN RPAREN
 %token COLON SEMICOLON COMMA PERIOD ARROW
@@ -32,6 +32,8 @@ open Lang
 %left EQUALS
 %left PLUS
 %left TIMES
+%left AND
+%left OR
 %left CONCAT
 %left LPAREN
 %left RPAREN
@@ -65,6 +67,8 @@ expr:
   | e1 = expr; EQUALS; e2 = expr { Equal(e1, e2) }
   | e1 = expr; TIMES; e2 = expr { Mult(e1, e2) }
   | e1 = expr; PLUS; e2 = expr { Plus(e1, e2) }
+  | e1 = expr; AND; e2 = expr { And(e1, e2) }
+  | e1 = expr; OR; e2 = expr { Or(e1, e2) }
   | e1 = expr; CONCAT; e2 = expr { Concat(e1, e2) }
   | FIRST; e = expr { First(e) }
   | SECOND; e = expr { Second(e) }

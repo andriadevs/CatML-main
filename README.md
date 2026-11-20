@@ -1,11 +1,11 @@
-# Assignment 8, CS3250
+# Assignment 8, CS3250 -- Alex Hollingsworth
 
 ## How to interact with a CatML program
 
 First build CatML with "dune build", then use "dune exec CatML [OPTION]" to use the program.
 
 For a list of options, use "dune exec CatML help".
-To run the test expression, use "dune exec CatML test".
+To run the test expression defined in main.ml, use "dune exec CatML test".
 To run a .catml file, use "dune exec CatML run [filename]".
 
 #### Modified syntax:
@@ -60,7 +60,7 @@ A full list of the things I added:
 - Break expresssions, reduces the left-hand side until it cannot be reduced further, then reduces into the right-hand side expression.
 - Rand expressions, takes two Int expressions and reduces to a random number in that range.
 
-I also implemented a rudimentary error handler that catches type, reduction, and parsing errors. For parsing errors, it reports what line the parsing error occurred on (depending on the expression, it might say that the error occurred on the next line, however, because "1\n*2" is a valid expression but "1\n2" is not). For reduction errors, it says what expression it got stuck on and prints out the trace. And for type errors, it says what expression the type could not be resolved for and tries to give a hint as to what the issue was but I didn't write hints for every single possible error, just the ones I figured would be the most common.
+I also implemented a rudimentary error handler that catches type, reduction, and parsing errors. For parsing errors, it reports what line the parsing error occurred on (depending on the expression, it might say that the error occurred on the next line, however, because "1\n*2" is a valid expression but "1\n2" is not). For reduction errors, it says what expression it got stuck on and prints out the trace. And for type errors, it says what expression the type could not be resolved for and tries to give a hint as to what the issue was but I didn't write hints for every single possible error.
 
 5. Any feedback on the structure of this assignment?
 

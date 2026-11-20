@@ -1,5 +1,6 @@
 open Lang
 
+let test_string = "Let x:int = 5 In x = 10" (* Test string can be set here to be used with CatML test *)
 let return_message = "Returned: " (* String printed to the terminal before printing the return value of the expression that was run. *)
 
 
@@ -14,9 +15,14 @@ let handle_type_error(full_e, err_e: expr * expr) =
   print_string("Type Error: Expression type cannot be resolved.\n");
   print_string("Type unresolvable at: " ^ string_of_expr(err_e) ^ "\n");
   begin match err_e with (* Error hints *)
+  | Not(_) -> print_string("! can only be used with booleans!\n")
+  | And(_,_) -> print_string("& can only be used with booleans!\n")
+  | Or(_,_) -> print_string("| can only be used with booleans!\n")
+  | Plus(_,_) -> print_string("+ can only be used with integers!\n")
+  | Mult(_,_) -> print_string("* can only be used with integers!\n")
   | If(e1,_,_) -> 
     if type_of_expr(empty_context,e1) == Type BOOL
-    then print_string("Then and Else path expressions must have the same type!\n")
+    then print_string("Then and Else must resolve to the same type!\n")
     else print_string("If statement requires a boolean!\n")
   | _ -> ()
   end
@@ -59,7 +65,7 @@ let do_help() = (* Called when help is used *)
 ;;
 
 let do_test() = (* Called when test is used *)
-  let test_string = "Let x:Int = 5 In x = 10" in
+  print_string("Test String: '" ^ test_string ^ "'\n");
   begin match parse(test_string) with
     | Some e ->
     begin match eval_with_errors(e) with
