@@ -1,4 +1,4 @@
-(library (name CatML))
+(executable (public_name CatML) (name main) (modules main lang parser lexer) (modes (byte exe)))
 
 (menhir (modules parser))
 

@@ -1,5 +1,6 @@
-Let fact = Fix f. x ->
+Print("Get the factorial of what number?");
+Let n:int = (int)Input() In
+Let fact:fun(int->int) = Fix int f.x:int ->
     If x = 0 Then 1
-    Else x * f (x + -1)
-
-In fact 5
+    Else x * f(x + -1)
+In fact(n)

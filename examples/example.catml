@@ -1,3 +1,8 @@
-Let x = 5 In
-Let y = 100 In
-x + y
+Print("Guess a number between 1 and 10!"); # This is an example of a comment!
+Let guess:int = (int)Input() In
+Let answer:int = Rand(1,10) In
+Print("The number was: " ^ (string)answer); # Once the "#" symbol is read, the rest of the line will be ignored!
+If (guess = answer) Then
+    Print("You guessed correctly!"); True
+Else
+    Print("You guessed incorrectly..."); False
